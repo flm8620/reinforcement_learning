@@ -143,7 +143,7 @@ classdef GridWorld
                         if j == obj.n_cols
                             actions(actions == 1) = [];
                         end
-                        if i == obj.n_cols
+                        if i == obj.n_rows
                             actions(actions == 2) = [];
                         end
                         if j == 1
