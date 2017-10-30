@@ -24,8 +24,17 @@ env = GridWorld(grid1, 0.95);
 env.state2coord
 env.coord2state
 env.state_actions{5}
-env.action_names{env.state_actions{5}}
 %%
+fprintf('\nActions per state\n\n');
+for i = 1:length(env.state_actions)
+  fprintf('s%2d : [', i);
+  for j = 1:length(env.state_actions{i})
+    fprintf('%s ', env.action_names{env.state_actions{i}(j)});
+  end
+  fprintf(']\n');
+end
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Policy definition
 % If you want to represent deterministic action you can just use the number of
@@ -67,7 +76,8 @@ render_q(env, q)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Work to do: Q4
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% here the v-function and q-function to be used for question 4
+% here the v-function and q-function to be used for question 4 (consider mainly
+% the v-function)
 v_q4 = [0.87691855, 0.92820033, 0.98817903, 0.00000000, ...
     0.67106071, -0.99447514, 0.00000000, -0.82847001, ...
     -0.87691855, -0.93358351, -0.99447514];
