@@ -2,7 +2,7 @@ import numpy as np
 import copy
 
 
-def collect_episodes(mdp, policy=None, horizon=None, n_episodes=1):
+def collect_episodes(mdp, policy=None, horizon=None, n_episodes=1, render=False):
     paths = []
 
     for _ in range(n_episodes):
@@ -15,7 +15,8 @@ def collect_episodes(mdp, policy=None, horizon=None, n_episodes=1):
         for __ in range(horizon):
             action = policy.draw_action(state)
             next_state, reward, terminal, _ = mdp.step(action)
-            # env.render()
+            if render:
+                mdp.render()
             observations.append(state)
             actions.append(action)
             rewards.append(reward)
