@@ -1,0 +1,74 @@
+\documentclass{article} % For LaTeX2e
+\usepackage{nips15submit_e,times}
+\usepackage{hyperref}
+\usepackage{url}
+%\documentstyle[nips14submit_09,times,art10]{article} % For LaTeX 2.09
+
+
+\title{Report for Project 10 ``Multi-armed bandit and zero-sum games (theory)''}
+
+
+\author{
+Leman FENG \\
+Ecole des Ponts ParisTech\\
+\texttt{flm8620@gmail.com} \\
+Website: \texttt{lemanfeng.com}
+}
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to \LaTeX{} to determine where to break
+% the lines. Using \AND forces a linebreak at that point. So, if \LaTeX{}
+% puts 3 of 4 authors names on the first line, and the last on the second
+% line, try using \AND instead of \And before the third author name.
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+
+%\nipsfinalcopy % Uncomment for camera-ready version
+
+\begin{document}
+
+
+\maketitle
+
+\section{Normal Form Games}
+In a normal K-person game, Player $k\in \{1,\dots,K\}$ has $N_k$ actions to choose from. All actions made from all players is a K-tuple $\mathbf{i} = (i_1,\dots,i_k)$. Each component $i_k\in\{1,\dots,N_k\}$. Every player choose his actions without knowing the choice of other players. Once all players have chosen their action, the result of game is given, which is the loss $l^{(k)}(\mathbf{i})\in[0,1]$ suffered by player $k$.
+
+The game is played once and then ends. The goal of each player is to minimize his loss.
+
+A player can use a randomized strategy to choose action. A mixed strategy for one player is a probability distribution $\mathbf{p}^{(k)}$ over its all possible actions. When he plays the game, an action is randomly choose according to this distribution. More formally, this randomization can be seen generated from a uniform random variable taking value from $[0,1]$. 
+
+If all players use mixed strategies, and the randomization between players is independent, then the joint distribution $\pi$ of K-tuple actions played by all players following the distribution defined by product of all mixed strategies $\{\mathbf{p}^{(j)}\}_k$
+
+\section{Nash Equilibrium \& Correlated Equilibrium}
+The joint distribution $\pi$ of K-tuple actions, made from product of mixed strategies $\{\mathbf{p}^{(j)}\}_k$, is a Nash equilibrium, in the sense that, if all players know the mixed strategies of others, then each one of them has no intention to modify his mixed strategy, because any modification of his strategy will lead to a higher expected loss for him.
+
+Nash proved that at least one Nash equilibrium exist for every finite game.
+
+If the joint distribution $\pi$ is not a product distribution, which means the above randomization between players is not independent, then a generalized notion of Nash Equilibrium can be introduced, called correlated equilibrium. In a correlated equilibrium, for each player, if he knows all other players will follow the joint distribution $\pi$, then he has no intention to modify his.
+
+\section{Two-person Zero-sum Games}
+A two-person zero-sum game is a normal form game where only played by two players, and the loss of two players always sums to zero. If two players use mixed strategies $\mathbf{p}$ and $\mathbf{q}$, then it's shown that if the pair $\mathbf{p},\mathbf{q}$ is a Nash equilibrium if and only if
+$$
+\min_{\mathbf{p}} \max_{\mathbf{q}} l(\mathbf{p},\mathbf{q}) = \max_{\mathbf{q}} \min_{\mathbf{p}} l(\mathbf{p},\mathbf{q})
+$$
+And the value of this equation $V$ is called the value of the game.
+
+I think it's easy to find a straight forward interpretation for this equation. $\max_{\mathbf{q}} l(\mathbf{p},\mathbf{q})$ represent that if the second player knows the first player's strategy $\mathbf{p}$, then the second player will choose the best mixed strategy $\mathbf{q}' = \arg\max_{\mathbf{q}}l(\mathbf{p},\mathbf{q})$ to increase first player's loss. Knowing the fact above, the first player should choose his best strategy $\mathbf{p}' = \arg\min_{\mathbf{p}}\max_{\mathbf{q}}l(\mathbf{p},\mathbf{q})$ to fight against the second player and decrease his loss in the worst case. And by the symmetric of the zero-sum game, this is the same for the second player.
+
+If the two players use this reasoning, and they choose their mixed strategies $\mathbf{p}',\mathbf{q}'$, then after their mixed strategies have been revealed to each other, then no one will regret choosing his strategy.
+
+\section{Repeated Games}
+Consider a normal K-person game which is played repeatedly. At round $t$, Each player choose mixed strategy $\mathbf{p}^{(k)}_t$. The randomization of all players is independent between players and between games played.
+
+Then we limit ourself in a "uncoupled" way of playing, where each player only knows and only cares his own loss function $l^{(k)}$. And he only choose he next strategy according to his past losses. 
+
+Personnaly I think the definition of "uncoupled" way in this book is very unclear. By reading carefully the following sections, I think it's important to notice that, the player $k$ know not only his past losses, but also his loss function $l^{(k)}(\mathbf{I})$, for any the K-tuple actions $\mathbf{I}=(I^{(1)},\dots,I^{(k)},\dots,I^{(K)})$. At round $t$, the player $k$ should also know all other players' history actions $\mathbf{I}_1,\dots,\mathbf{I}_{t-1}$, because otherwise knowing his loss function $l^{(k)}(\mathbf{I})$ is useless.
+
+But we just said player $k$ don't know other's loss function and only cares his own losses, one may ask why player $k$ should care about other's history actions, and why not just consider the game as a total black box for player $k$. Well, one should notice that an important usage of the loss function $l^{(k)}(\mathbf{I})$ combined with all history of players' actions is that player $k$ can know, after the round $t$, the loss value $l^{(k)}(I^1_t,\dots,{I^{(k)}_t}',\dots, I^{(K)}_t)$ which represent the loss he would have suffered at round $t$ if he had played ${I^{(k)}_t}'$ instead of $I^{(k)}_t$ at that time.
+
+But the reason why we don't let player $k$ know others' loss functions is that we don't allow player $k$ to know why other players made their moves. Player $k$ should not analyse the motivation or pattern of other player.
+
+\end{document}
