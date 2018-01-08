@@ -60,7 +60,7 @@ I think it's easy to find a straight forward interpretation for this equation. $
 
 If the two players use this reasoning, and they choose their mixed strategies $\mathbf{p}',\mathbf{q}'$, then after their mixed strategies have been revealed to each other, then no one will regret choosing his strategy.
 
-\section{Repeated Games}
+\section{Uncoupled Repeated Games}
 Consider a normal K-person game which is played repeatedly. At round $t$, Each player choose mixed strategy $\mathbf{p}^{(k)}_t$. The randomization of all players is independent between players and between games played.
 
 Then we limit ourself in a "uncoupled" way of playing, where each player only knows and only cares his own loss function $l^{(k)}$. And he only choose he next strategy according to his past losses. 
@@ -69,6 +69,16 @@ Personnaly I think the definition of "uncoupled" way in this book is very unclea
 
 But we just said player $k$ don't know other's loss function and only cares his own losses, one may ask why player $k$ should care about other's history actions, and why not just consider the game as a total black box for player $k$. Well, one should notice that an important usage of the loss function $l^{(k)}(\mathbf{I})$ combined with all history of players' actions is that player $k$ can know, after the round $t$, the loss value $l^{(k)}(I^1_t,\dots,{I^{(k)}_t}',\dots, I^{(K)}_t)$ which represent the loss he would have suffered at round $t$ if he had played ${I^{(k)}_t}'$ instead of $I^{(k)}_t$ at that time.
 
-But the reason why we don't let player $k$ know others' loss functions is that we don't allow player $k$ to know why other players made their moves. Player $k$ should not analyse the motivation or pattern of other player.
+But the reason why we don't let player $k$ know others' loss functions is that we don't allow player $k$ to know why other players made their moves. Player $k$ should not analyse the motivation nor any pattern of other players' move.
+
+Thus, with all these details above, I think it's better to reformulate the "uncoupled" playing like this: 
+
+Player $k$ doesn't need to realize the existence of all other players. For player $k$, the game is like an environment that can change it state $s\in\{1,\dots,N_s\}$ over time. After taking one action $I_t$ at time $t$, the environment will not only give the loss $l(I_t, s_t)$, but also the state $s_t$. Then the table of all losses $l(i, s_t), i\in\{1,\dots,N_k\}$ if player $k$ had played actions $i$ can be known by player. Then player $k$ can decide his action for next round $t+1$ bases on all his history actions and all these history tables $l(i, s_\tau), i\in\{1,\dots,N_k\}, \tau\in\{1,\dots,t\}$.
+
+So it's equivalent to have only two players or many players, since all other players can be seen as one environment and the number of states of the environment is simply the product of action numbers $N_{k'}$ for all other players $k'\neq k$.
+
+By this reformulation, we can see very clearly that for each player $k$, the "uncoupled" way of playing really limit the information he can use. And we can understand more easily why in "uncoupled" way of playing, the author called this a regret-based procedure. Because what the player can do is only playing an action, observing the loss table for all possible actions, then knowing the regret that he could have done better if he played another action, and rethinking for the next round.
+
+The "uncoupled" way made the problem simple, thus many results from precedent chapters can be applied here. But the interesting part of this chapter is that, by this very limited "uncoupled" way, there are still some equilibria can be reached in game.
 
 \end{document}
