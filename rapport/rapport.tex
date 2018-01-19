@@ -81,4 +81,48 @@ By this reformulation, we can see very clearly that for each player $k$, the "un
 
 The "uncoupled" way made the problem simple, thus many results from precedent chapters can be applied here. But the interesting part of this chapter is that, by this very limited "uncoupled" way, there are still some equilibria can be reached in game.
 
+\section{Hannan Consistent Strategy}
+I want to review the Hannan consistency although this is a term defined in previous chapter in the book. We should firstly review the notion of external and internal regret.
+
+If we consider other players' move as the state of environment, we note $s_t$ the state of environment at time $t$, and note $\mathbf{p}_t$ as the strategy of player $k$ at time $t$. Then the internal regret of player $k$ is defined as:
+
+$$
+\sum_{t=1}^n l(\mathbf{p}_t, s_t) - \min_{i=1,\dots,N_k} \sum_{t=1}^n l(i, s_t)
+$$
+
+Intuitively, this is the regret of player $k$ of his cumulative loss from time $t=1$ to $n$ compared to the cumulative loss of a constant strategy $i$ played against the same history state $\{s_t\}_{t=1\dots n}$. Notice that the latter is different from the cumulative loss obtained by a playing of constant strategy because once player $k$'s components find out that he play constant move, they might learn this and fight back easily.
+
+And the internal regret is defined as:
+
+$$
+\max_{i,j=1,\dots,n}\sum_{t=1}^n p_{i,t}  (l(i,s_t)-l(j,s_t))
+$$
+
+which can be explained easily as the regret of player $k$ if he had chosen action $j$ each time he chose $i$. It's shown in chapter 4 that a small internal regret implies a small external regret, but not in the reverse. 
+
+Then it's time to introduce the Hannan consistency. We say the player $k$ has a Hannan consistency strategy if
+\begin{equation}
+\limsup_{n\to \infty} \frac{1}{n}(l(I_t, s_t) - \min_{i=1,\dots,N_k}\sum_{t=1}^n l(i, s_t)) = 0\
+\end{equation}
+with probability 1.
+
+Hannan consistency basically means the amortised external regret for player $k$ is zero. It's shown that Hannan consistency is achievable if the actions space and environment state space is finite. And one example is a simple exponential strategy:
+$$
+p_i,t = \frac{\exp{ ( -\eta \sum_{s=1}^t ) l(i,s_t) } }{ \sum_{k=1}^{N_k} \exp{(-\eta \sum_{s=1}^t l(k,s_t) )} }
+$$
+It can be interpreted as player $k$ should choose the best action $i$, ``best'' in the sense that if player $k$ should replace all his previous actions by one constant action, then he should choose $i$. Then to make the strategy more random, it's better to take a softmax function and play a probability distribution.
+
+I think it is not hard to imagine why Hannan consistency is always possible. For a finite game, when you played it long enough, you will have found out the frequency of environment state $s$. Since you know your loss function for all combination of your action and environment state, you can play according to the empirical probability distribution of environment state. But you should not make a naive strategy seen through easily by opponents, so the best way to hide your pattern is to randomize your strategy with a reasonable probability distribution.
+
+But there is another corollary that states, there is always a loss function $l$ such that any randomized strategy of player $k$ will suffer at least an amortized regret of order $\frac{1}{\sqrt{n}}$.
+
+\section{Link to Multi-Armed Bandit}
+The stochastic Multi-Armed Bandit we saw in class is different from the above model. But I found later in the slides that the above model is called Adversarial Multi-Armed Bandit, or called Non-Stochastic Multi-Armed Bandit. I think we should use both Adversarial and Non-Stochastic to describe it. 
+
+To change from a stochastic MAB to Non-Stochastic MAV, we drop the probability distribution of each arm, so each arm will give only a constant reward. Suddenly the game is so easy. You just need to pull each arm to know the whole information. To make it harder, we let the environment have right to change its state at each round. Each arm will give a deterministic reward according to current state. But the player won't know the current state until he made an action.
+
+So the uncertainty for player changed from the schochastic nature of arm to an unpredictable environment, in exchange, the player can know the loss/reward for all pairs of arm and states.
+
+The Adversarial MAB is much harder than Stochastic MAV. We can see this from the bound on regret in each case. For Stochastic MAV, the upper and lower bound on amortised regret are both in ordre $\frac{\log{n}}{n}$. But for Adversarial MAV, we can only say Hannan consistency strategy can make amortised regret converge to zero, but there is a lower bound $\frac{1}{\sqrt{n}}$, which is way larger than the upper bound in Stochastic MAB. So we can say the prediction of environment's move is much harder than trying a set of machine which don't change their internal parameter over time.
+
 \end{document}
