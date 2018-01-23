@@ -26,7 +26,7 @@ Website: \texttt{lemanfeng.com}
 \newcommand{\fix}{\marginpar{FIX}}
 \newcommand{\new}{\marginpar{NEW}}
 
-%\nipsfinalcopy % Uncomment for camera-ready version
+\nipsfinalcopy % Uncomment for camera-ready version
 
 \begin{document}
 
@@ -65,7 +65,7 @@ Consider a normal K-person game which is played repeatedly. At round $t$, Each p
 
 Then we limit ourself in a "uncoupled" way of playing, where each player only knows and only cares his own loss function $l^{(k)}$. And he only choose he next strategy according to his past losses. 
 
-Personnaly I think the definition of "uncoupled" way in this book is very unclear. By reading carefully the following sections, I think it's important to notice that, the player $k$ know not only his past losses, but also his loss function $l^{(k)}(\mathbf{I})$, for any the K-tuple actions $\mathbf{I}=(I^{(1)},\dots,I^{(k)},\dots,I^{(K)})$. At round $t$, the player $k$ should also know all other players' history actions $\mathbf{I}_1,\dots,\mathbf{I}_{t-1}$, because otherwise knowing his loss function $l^{(k)}(\mathbf{I})$ is useless.
+Personally I think the definition of "uncoupled" way in this book is very unclear. By reading carefully the following sections, I think it's important to notice that, the player $k$ know not only his past losses, but also his loss function $l^{(k)}(\mathbf{I})$, for any the K-tuple actions $\mathbf{I}=(I^{(1)},\dots,I^{(k)},\dots,I^{(K)})$. At round $t$, the player $k$ should also know all other players' history actions $\mathbf{I}_1,\dots,\mathbf{I}_{t-1}$, because otherwise knowing his loss function $l^{(k)}(\mathbf{I})$ is useless.
 
 But we just said player $k$ don't know other's loss function and only cares his own losses, one may ask why player $k$ should care about other's history actions, and why not just consider the game as a total black box for player $k$. Well, one should notice that an important usage of the loss function $l^{(k)}(\mathbf{I})$ combined with all history of players' actions is that player $k$ can know, after the round $t$, the loss value $l^{(k)}(I^1_t,\dots,{I^{(k)}_t}',\dots, I^{(K)}_t)$ which represent the loss he would have suffered at round $t$ if he had played ${I^{(k)}_t}'$ instead of $I^{(k)}_t$ at that time.
 
@@ -98,7 +98,9 @@ $$
 \max_{i,j=1,\dots,n}\sum_{t=1}^n p_{i,t}  (l(i,s_t)-l(j,s_t))
 $$
 
-which can be explained easily as the regret of player $k$ if he had chosen action $j$ each time he chose $i$. It's shown in chapter 4 that a small internal regret implies a small external regret, but not in the reverse. 
+which can be explained easily as the regret of player $k$ if he had chosen action $j$ each time he chose $i$. 
+
+It's shown in chapter 4 that a small internal regret implies a small external regret, but not in the reverse. (There is actually an error of index typo in page 80). It's intuitively true because external regret only compares to a naive constant action, but internal regret requires that your strategy should be the best w.r.t all other versions of strategy created by permutation of your strategy.
 
 Then it's time to introduce the Hannan consistency. We say the player $k$ has a Hannan consistency strategy if
 \begin{equation}
@@ -106,7 +108,7 @@ Then it's time to introduce the Hannan consistency. We say the player $k$ has a 
 \end{equation}
 with probability 1.
 
-Hannan consistency basically means the amortised external regret for player $k$ is zero. It's shown that Hannan consistency is achievable if the actions space and environment state space is finite. And one example is a simple exponential strategy:
+Hannan consistency basically means the amortized external regret for player $k$ is zero. It's shown that Hannan consistency is achievable if the actions space and environment state space is finite. And one example is a simple exponential strategy:
 $$
 p_i,t = \frac{\exp{ ( -\eta \sum_{s=1}^t ) l(i,s_t) } }{ \sum_{k=1}^{N_k} \exp{(-\eta \sum_{s=1}^t l(k,s_t) )} }
 $$
@@ -116,13 +118,40 @@ I think it is not hard to imagine why Hannan consistency is always possible. For
 
 But there is another corollary that states, there is always a loss function $l$ such that any randomized strategy of player $k$ will suffer at least an amortized regret of order $\frac{1}{\sqrt{n}}$.
 
-\section{Link to Multi-Armed Bandit}
+
+
+\subsection{Link to Multi-Armed Bandit}
 The stochastic Multi-Armed Bandit we saw in class is different from the above model. But I found later in the slides that the above model is called Adversarial Multi-Armed Bandit, or called Non-Stochastic Multi-Armed Bandit. I think we should use both Adversarial and Non-Stochastic to describe it. 
 
-To change from a stochastic MAB to Non-Stochastic MAV, we drop the probability distribution of each arm, so each arm will give only a constant reward. Suddenly the game is so easy. You just need to pull each arm to know the whole information. To make it harder, we let the environment have right to change its state at each round. Each arm will give a deterministic reward according to current state. But the player won't know the current state until he made an action.
+To change from a stochastic MAB to Non-Stochastic MAB, we drop the probability distribution of each arm, so each arm will give only a constant reward. Suddenly the game is so easy. You just need to pull each arm to know the whole information. To make it harder, we let the environment have right to change its state at each round. Each arm will give a deterministic reward according to current state. But the player won't know the current state until he made an action.
 
-So the uncertainty for player changed from the schochastic nature of arm to an unpredictable environment, in exchange, the player can know the loss/reward for all pairs of arm and states.
+So the uncertainty for player changed from the stochastic nature of arm to an unpredictable environment, in exchange, the player can know the loss/reward for all pairs of arm and states.
 
-The Adversarial MAB is much harder than Stochastic MAV. We can see this from the bound on regret in each case. For Stochastic MAV, the upper and lower bound on amortised regret are both in ordre $\frac{\log{n}}{n}$. But for Adversarial MAV, we can only say Hannan consistency strategy can make amortised regret converge to zero, but there is a lower bound $\frac{1}{\sqrt{n}}$, which is way larger than the upper bound in Stochastic MAB. So we can say the prediction of environment's move is much harder than trying a set of machine which don't change their internal parameter over time.
+The Adversarial MAB is much harder than Stochastic MAB. We can see this from the bound on regret in each case. For Stochastic MAB, the upper and lower bound on amortized regret are both in order $\frac{\log{n}}{n}$. But for Adversarial MAB, the upper bound obtained by Hannan consistency strategy and lower bound from the corollary are of order $\frac{1}{\sqrt{n}}$, which is way larger than the upper bound in Stochastic MAB. So we can say the prediction of environment's move is much harder than simply  playing a group of machines which don't change their internal parameter over time.
 
+Another link to MAB is that the external regret in the case of MAB is close to the regret defined in MAB because the best constant strategy actually is the best strategy in MAB (pulling the arm with highest expectation).
+
+\subsection{Applying Hannan consistency to two-player zero-sum game}
+One theorem states that in a two-player zero-sum game, if both player follow their own Hannan consistency strategy, then the averaged loss for both player will converge to the value of the game. The prove is very simple, but the result is interesting. 
+
+Notice that for two-player zero-sum game, the ``uncoupled'' way of playing makes no different since each play knows that the loss of opponent is the negative loss of itself.
+
+\subsection{Correlated Equilibrium in K-person games}
+In a K-person game, if all player use Hannan consistency strategy, it's shown that the empirical joint distribution of play will converge to Hannan set of game. The Hannan set contains the set of Correlated Equilibrium, and is much larger than the latter. So Hannan set is not very useful.
+
+We saw that Hannan consistency means that the amortized external regret converges to zero. We also said that the external regret is always smaller than internal regret. So if we demand further that each player should use a strategy which make the amortized internal regret converge to zero, then the empirical game will not only converge to the Hannan set, but also to the correlated Equilibrium.
+
+But how can a player minimize his internal regret ? The existence of this kind to strategy is given in chapter 4 in the book. It's shown that if you have a external regret minimizing strategy (like exponential weighted strategy described above), then you can always construct a internal regret minimizing strategy based on it.
+
+The prove is tricky, but we can understand it intuitively. By looking at the action and loss history of player, one can summarize which permutation of action in strategy can be done to get a better result, then one just need to ``patch'' this modification to it's original strategy.
+
+\section{Unknown games}
+The Unknown game is a more limited model of game than the ``uncoupled'' way of playing. Player $k$ cannot even know his own loss function in an unknown game, nor the actions of other players. The entire game is just like a black box with a hidden time-depending state. Player $k$ can only know the number of actions he can choose from and the loss of each play.
+
+The unknown game is more close to multi-arm bandit model in which you can only pull arms and observe losses. Even with such limited information, player $k$ can always play a internal minimizing strategy (which is based on external minimizing strategy whose existence is proved). And if all player use internal minimizing strategy, then the joint empirical distribution converges to correlated equilibrium.
+
+\section{Convergence to Nash Equilibria}
+Go back to the uncoupled way of playing, which means players can observe other's move after each round. The book proposed a strategy for players to find a Nash Equilibria in a K-person game. The strategy involves sending messages to other players by player certain action at certain time. 
+
+But this is very confusing to me. I didn't see any value of this kind of strategy because normally if we play a game, we assume that the opponent is adversary and each one should maximize it's own profit and lower the others'. The strategy proposed in book demand all players to follow a particular strategy and communicate sincerely each other. It seems that all players are in one team and their goal is to abuse the game against the creator of its rules. 
 \end{document}
